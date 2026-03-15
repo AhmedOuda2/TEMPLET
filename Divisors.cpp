@@ -6,5 +6,6 @@ vector<int> div(int n) {
             v.push_back(n / i);
         }
     }
+    sort(all(v));
     return v;
 }
