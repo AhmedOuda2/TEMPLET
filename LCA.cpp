@@ -1,7 +1,6 @@
 class LCA {
     int n, lg;
     vector<vector<int> > adj, anc;
-    vector<int> lvl;
 
     void buildAncestor(int node,int par) {
         anc[node][0] = par;
@@ -17,7 +16,21 @@ class LCA {
         }
     }
 
+    int lca(int u,int v) {
+        if (lvl[u] < lvl[v]) swap(u, v);
+        u = kthAncestor(u, lvl[u] - lvl[v]);
+        if (u == v) return u;
+        for (int i = lg - 1; ~i; i--) {
+            if (anc[u][i] == anc[v][i]) continue;
+            u = anc[u][i];
+            v = anc[v][i];
+        }
+        return anc[v][0];
+    }
+
 public:
+    vector<int> lvl;
+
     LCA(vector<vector<int> > a,int root) {
         n = a.size();
         lg = 1;
@@ -30,6 +43,9 @@ public:
         buildAncestor(root, root);
     }
 
+    int lowestCommonAncestor(int u,int v) {
+        return lca(u, v);
+    }
 
     int kthAncestor(int node,int k) {
         for (int i = lg - 1; ~i; i--) {
@@ -40,17 +56,6 @@ public:
         return node;
     }
 
-    int lca(int u,int v) {
-        if (lvl[u] < lvl[v]) swap(u, v);
-        u = kthAncestor(u, lvl[u] - lvl[v]);
-        if (u == v) return u;
-        for (int i = lg - 1; ~i; i--) {
-            if (anc[u][i] == anc[v][i]) continue;
-            u = anc[u][i];
-            v = anc[v][i];
-        }
-        return anc[u][0];
-    }
 
     int distance(int u,int v) {
         int l = lca(u, v);
