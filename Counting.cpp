@@ -1,10 +1,11 @@
 int Fpower(int n,int p,int MOD) {
-    if (!p) return 1;
-    int ans = Fpower(n, p / 2, MOD) % MOD;
-    ans *= ans;
-    ans %= MOD;
-    if (p & 1)ans = (ans * (n % MOD)) % MOD;
-    return ans;
+    int res = 1;
+    while (p) {
+        if (p & 1) res = res % MOD * (n % MOD) % MOD;
+        n = n % MOD * (n % MOD) % MOD;
+        p >>= 1;
+    }
+    return res;
 }
 
 int inverse(int n) {
@@ -29,4 +30,15 @@ int P(int n,int r) {
 
 int C(int n,int r) {
     return fact[n] * invfact[n - r] % mod * invfact[r] % mod;
+}
+
+int nCr(int n, int r) {
+    // without modulo
+    if (r < 0 || r > n) return 0;
+    r = min(r, n - r);
+    int result = 1;
+    for (int i = 1; i <= r; ++i) {
+        result = result * (n - r + i) / i;
+    }
+    return result;
 }
